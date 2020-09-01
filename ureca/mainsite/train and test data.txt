@@ -1,1 +1,1 @@
-Place the train and test data csv files in this directory!
+In order to run this project , just unzip files train.rar and test.rar
