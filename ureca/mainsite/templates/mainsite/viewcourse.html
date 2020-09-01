@@ -1,0 +1,114 @@
+{% extends 'mainsite/basic.html' %} {% block title %} {% endblock %} {% block body %} {% load humanize%} {% load static %}
+
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-8 blog-main">
+            <h3 class="pb-4 mb-4 font-italic border-bottom">
+
+            </h3>
+
+            <div class="blog-post">
+                <h2 class="blog-post-title">{{course.name}}</h2>
+
+
+                <h2></h2>
+
+                <h3>Course code - {{course.code}}</h3>
+
+                <h3> Description - {{course.desc}} </h3>
+
+
+
+                <h3> Available - {{course.available}} </h3>
+                <div class="card" style="width: 18rem;">
+                    <img src=c lass="card-img-top" alt="...">
+                    <div class="card-body">
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </div>
+                <h3> {{course.instructor_1}} </h3>
+
+
+
+
+            </div>
+            <!-- /.blog-post -->
+
+
+
+
+        </div>
+
+
+    </div>
+</div>
+
+<div class='container'>
+    <p> average rating is {{average_rating}}</p>
+    {% if user.is_authenticated %}
+    <form action='/postRating' method='post'>
+
+        <input type='hidden' name='module_id' value='{{course.m_id}}'> {% csrf_token %}
+        <div class="form-group">
+            <label for="exampleFormControlSelect2">Select Rating( between 1 to 5 )</label>
+            <select multiple class="form-control" name='rate'>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% else %}
+    <p> Please login to post a rating! </p>
+    {% endif %}
+    <h2> Reviews ({{comments.count}}) </h2>
+
+    <div class='my-2'>
+        {% if user.is_authenticated %}
+        <form action='/postComment' method='post'>
+
+
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Post Comment</label>
+                <input type='text' name='comment' class="form-control" placeholder='enter review here'>
+
+
+            </div>
+
+            <input type='hidden' name='module_id' value='{{course.m_id}}'>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        {% else %}
+        <p> Please login to post a review! </p>
+        {% endif %}
+
+
+    </div>
+
+
+    {% for comment in comments%}
+    <div class='row my-3'>
+        <div class='col-md-1 '>
+            <svg width="5em" height="5em" viewBox="0 0 16 16" class="rounded bi bi-person-fill border border-dark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+              </svg>
+        </div>
+        <div class='col-md-11 '>
+            <b>{{comment.user.username}}</b> at <span class='badge badge-secondary'> {{comment.timestamp | naturaltime}}</span>
+            <div>{{comment.comment}}</div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+
+
+
+</div>
+{% endblock %}
